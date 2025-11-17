@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Blabbing for Business × Savannah State Alumnni Chapter — Dashboard Demo</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f8f8f8;
+    margin: 0;
+    padding: 0;
+    color: #111;
+  }
+  header {
+    background: #5e17eb;
+    color: #fff;
+    padding: 20px 30px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  .container {
+    padding: 20px 30px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+  .card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #381d5c;
+  }
+  .metric {
+    font-size: 36px;
+    font-weight: bold;
+    margin-top: 5px;
+    color: #5e17eb;
+  }
+  .subtext {
+    color: #666;
+    font-size: 14px;
+  }
+  .chart-svg {
+    width: 100%;
+    height: 220px;
+    display: block;
+  }
+  .chart-title {
+    font-size: 14px;
+    fill: #381d5c;
+  }
+  .chart-axis {
+    stroke: #c2b2e0;
+    stroke-width: 1;
+  }
+  .chart-grid {
+    stroke: #e6e0f8;
+    stroke-width: 1;
+  }
+  .chart-line-primary {
+    stroke: #5e17eb;
+    stroke-width: 2.5;
+    fill: none;
+  }
+  .chart-line-accent {
+    stroke: #ffbd59;
+    stroke-width: 2;
+    fill: none;
+  }
+  .chart-bar-primary { fill: #5e17eb; }
+  .chart-bar-secondary { fill: #c2b2e0; }
+  .chart-bar-tertiary { fill: #381d5c; }
+  .chart-label {
+    font-size: 11px;
+    fill: #555;
+  }
+  nav {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 15px;
+  }
+  nav a {
+    padding: 10px 16px;
+    background: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #381d5c;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  nav a:hover {
+    background: #e6e0f8;
+  }
+  .two-col {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 20px;
+  }
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .table th,
+  .table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+  }
+  .table th {
+    color: #666;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+  .table tr:hover {
+    background: #f9f6ff;
+    cursor: pointer;
+  }
+  .active-row {
+    background: #f2ebff;
+  }
+  .pill {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .pill-draft { background: #e6e0f8; color: #381d5c; }
+  .pill-scheduled { background: #ffbd59; color: #381d5c; }
+  .pill-sent { background: #d1f7c4; color: #266534; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .btn-primary {
+    background: #5e17eb;
+    color: #fff;
+  }
+  .btn-ghost {
+    background: #f3f3f3;
+    color: #381d5c;
+  }
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .tab {
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    cursor: pointer;
+    background: #f3f3f3;
+    color: #555;
+  }
+  .tab.active {
+    background: #5e17eb;
+    color: #fff;
+  }
+  .campaign-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+  .campaign-select {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 13px;
+  }
+  .asset-block {
+    background: #f8f8f8;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+  .asset-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #777;
+    margin-bottom: 4px;
+  }
+  .asset-content {
+    white-space: pre-line;
+  }
+  .pie-chart-gender {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: conic-gradient(#5e17eb 0 52%, #ffbd59 52% 100%);
+    margin: 0 auto 8px;
+  }
+  .gender-legend {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    font-size: 12px;
+    color: #555;
+    align-items: center;
+  }
+  .gender-legend span::before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    margin-right: 6px;
+  }
+  .legend-female::before { background: #5e17eb; }
+  .legend-male::before { background: #ffbd59; }
+  .pie-chart-gender {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: conic-gradient(#5e17eb 0 52%, #ffbd59 52% 100%);
+    margin: 0 auto 8px;
+  }
+  .gender-legend {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    font-size: 12px;
+    color: #555;
+    align-items: center;
+  }
+  .gender-legend span::before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    margin-right: 6px;
+  }
+  .legend-female::before { background: #5e17eb; }
+  .legend-male::before { background: #ffbd59; }
+
+  .oppty-card {
+    padding: 20px;
+  }
+  .oppty-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .goal-toggle {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .goal-pill {
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: none;
+    background: #f3f3f3;
+    color: #555;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .goal-pill.active {
+    background: #5e17eb;
+    color: #fff;
+  }
+  .oppty-layout {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .oppty-left {
+    flex: 1;
+    min-width: 260px;
+  }
+  .oppty-right {
+    flex: 2;
+    min-width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .segment-list {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0 0;
+  }
+  .segment-item {
+    padding: 8px 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .segment-item:hover {
+    background: #f9f6ff;
+  }
+  .segment-item.active {
+    background: #f2ebff;
+    font-weight: 600;
+  }
+  .segment-tag {
+    font-size: 12px;
+  }
+  .oppty-scores {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .oppty-score-pill {
+    flex: 1;
+    min-width: 140px;
+    background: #f8f8f8;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 13px;
+  }
+  .oppty-score-value {
+    font-size: 20px;
+    font-weight: 600;
+    color: #5e17eb;
+  }
+  .oppty-questions,
+  .oppty-people,
+  .oppty-forecast {
+    background: #f8f8f8;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  .oppty-people-list {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0;
+  }
+  .oppty-people-list li {
+    margin-bottom: 4px;
+  }
+</style>
+</head>
+<body>
+<header>Blabbing × Savannah State — Alumni Dashboard Demo</header>
+<div class="container">
+
+    <nav>
+    <a href="#overview">Overview</a>
+    <a href="#membership">Membership</a>
+    <a href="#fundraising">Fundraising</a>
+    <a href="#events">Event Insights</a>
+    <a href="#campaigns">Campaigns</a>
+    <a href="#opportunity">Opportunities</a>
+    <a href="#sentiment">Pulse Sentiment</a>
+  </nav>
+
+  <!-- Overview Section -->
+  <section id="overview">
+    <h2>Overview</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Total Members</h3>
+        <div class="metric">80</div>
+        <div class="subtext">Goal: 100 by June 2026</div>
+      </div>
+      <div class="card">
+        <h3>Avg Event Sentiment</h3>
+        <div class="metric">82%</div>
+        <div class="subtext">Based on last 6 events</div>
+      </div>
+      <div class="card">
+        <h3>High-Opportunity Members</h3>
+        <div class="metric">46</div>
+        <div class="subtext">Based on recent engagement and sentiment</div>
+      </div>
+    </div>
+  </section>
+
+  <br /><br />
+
+  <!-- Membership Section -->
+  <section id="membership">
+    <h2>Membership Growth</h2>
+    <div class="card" style="padding:20px;">
+
+      <!-- 3-Chart Horizontal Row -->
+      <div style="display:flex; gap:40px; justify-content:space-between; align-items:flex-start; width:100%;">
+
+        <!-- Trend Chart -->
+        <svg class="chart-svg" viewBox="0 0 400 220" style="width:33%; min-width:300px;" role="img" aria-labelledby="title-membership">
+          <title id="title-membership">Membership Trend (Last 12 Months)</title>
+          <line x1="50" y1="20" x2="50" y2="190" class="chart-axis" />
+          <line x1="50" y1="190" x2="370" y2="190" class="chart-axis" />
+          <g class="chart-label">
+            <line x1="50" y1="150" x2="370" y2="150" class="chart-grid" />
+            <line x1="50" y1="110" x2="370" y2="110" class="chart-grid" />
+            <line x1="50" y1="70" x2="370" y2="70" class="chart-grid" />
+            <text x="20" y="194">60</text>
+            <text x="20" y="154">70</text>
+            <text x="20" y="114">80</text>
+            <text x="20" y="74">90</text>
+          </g>
+          <polyline class="chart-line-primary" points="60,170 90,162 120,156 150,145 180,135 210,128 240,118 270,110 300,100 330,92" />
+          <g class="chart-label">
+            <text x="55" y="205">Sep</text>
+            <text x="85" y="205">Oct</text>
+            <text x="115" y="205">Nov</text>
+            <text x="145" y="205">Dec</text>
+            <text x="175" y="205">Jan</text>
+            <text x="205" y="205">Feb</text>
+            <text x="235" y="205">Mar</text>
+            <text x="265" y="205">Apr</text>
+            <text x="295" y="205">May</text>
+            <text x="325" y="205">Jun</text>
+          </g>
+          <text x="60" y="14" class="chart-title">Membership (Mock Data)</text>
+        </svg>
+
+        <!-- Age Distribution Chart -->
+        <svg class="chart-svg" viewBox="0 0 300 220" style="width:33%; min-width:260px;" role="img" aria-labelledby="title-age">
+          <title id="title-age">Age Distribution</title>
+          <text x="10" y="20" class="chart-title">Age Groups</text>
+
+          <rect x="80" y="50" width="160" height="20" fill="#5e17eb" />
+          <text x="10" y="65" class="chart-label">25–35</text>
+          <text x="250" y="65" class="chart-label">22</text>
+
+          <rect x="80" y="100" width="200" height="20" fill="#c2b2e0" />
+          <text x="10" y="115" class="chart-label">36–50</text>
+          <text x="250" y="115" class="chart-label">38</text>
+
+          <rect x="80" y="150" width="140" height="20" fill="#381d5c" />
+          <text x="10" y="165" class="chart-label">51+</text>
+          <text x="250" y="165" class="chart-label">20</text>
+        </svg>
+
+        <!-- Gender Pie Chart (CSS conic-gradient for perfect circle) -->
+        <div style="width:33%; min-width:220px; display:flex; flex-direction:column; align-items:center;">
+          <div class="pie-chart-gender" aria-label="Gender breakdown pie chart"></div>
+          <div class="gender-legend">
+            <span class="legend-male">Male 46%</span>
+            <span class="legend-female">Female 52%</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <br /><br />
+
+  <!-- Fundraising Section -->
+  <section id="fundraising">
+    <h2>Fundraising Analytics</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>YTD Scholarship Raised</h3>
+        <div class="metric">$26,400</div>
+        <div class="subtext">Target: $50,000</div>
+      </div>
+      <div class="card">
+        <h3>Corporate Matching</h3>
+        <div class="metric">$12,000</div>
+        <div class="subtext">Delta, AT&amp;T, Coca-Cola (mock)</div>
+      </div>
+      <div class="card">
+        <h3>Donor Breakdown</h3>
+        <svg class="chart-svg" viewBox="0 0 400 220" role="img" aria-labelledby="title-donors">
+          <title id="title-donors">Donor Breakdown by Source</title>
+          <!-- Axes -->
+          <line x1="140" y1="30" x2="140" y2="190" class="chart-axis" />
+          <line x1="140" y1="190" x2="370" y2="190" class="chart-axis" />
+          <!-- X grid lines & labels (dollar amounts) -->
+          <g class="chart-label">
+            <text x="135" y="205">0</text>
+            <text x="205" y="205">10k</text>
+            <text x="270" y="205">20k</text>
+            <text x="335" y="205">30k</text>
+            <line x1="200" y1="30" x2="200" y2="190" class="chart-grid" />
+            <line x1="260" y1="30" x2="260" y2="190" class="chart-grid" />
+            <line x1="320" y1="30" x2="320" y2="190" class="chart-grid" />
+          </g>
+          <!-- Bars (fake data) -->
+          <g class="chart-label">
+            <!-- Individuals 14k -->
+            <rect x="140" y="40" width="230" height="24" class="chart-bar-primary" />
+            <text x="10" y="57">Individuals</text>
+            <text x="310" y="57" fill="#fff">$14k</text>
+            <!-- Corporate Matching 8k -->
+            <rect x="140" y="80" width="170" height="24" class="chart-bar-secondary" />
+            <text x="10" y="97">Corporate Matching</text>
+            <text x="280" y="97" fill="#fff">$8k</text>
+            <!-- Events 10k -->
+            <rect x="140" y="120" width="190" height="24" class="chart-bar-tertiary" />
+            <text x="10" y="137">Events</text>
+            <text x="290" y="137" fill="#fff">$10k</text>
+            <!-- Other 4k -->
+            <rect x="140" y="160" width="130" height="24" fill="#f5e042" />
+            <text x="10" y="177">Other</text>
+            <text x="250" y="177" fill="#381d5c">$4k</text>
+          </g>
+          <text x="145" y="18" class="chart-title">YTD Scholarship Sources (Mock)</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <br /><br />
+
+  <!-- Event Insights Section -->
+  <section id="events">
+    <h2>Event Insights</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Top Performing Event</h3>
+        <div class="metric">Boots &amp; Ground Mixer</div>
+        <div class="subtext">94% positivity • 127 attendees (mock)</div>
+      </div>
+      <div class="card">
+        <h3>Upcoming Events</h3>
+        <ul>
+          <li>65th Anniversary Gala — Nov 22</li>
+          <li>Holiday Alumni Party — Dec 12</li>
+          <li>Spring Networking Night — Feb 10</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Event Comparison</h3>
+        <svg class="chart-svg" viewBox="0 0 400 220" role="img" aria-labelledby="title-events">
+          <title id="title-events">Event Satisfaction Comparison</title>
+          <!-- Axes -->
+          <line x1="50" y1="20" x2="50" y2="190" class="chart-axis" />
+          <line x1="50" y1="190" x2="370" y2="190" class="chart-axis" />
+          <!-- Y grid & labels -->
+          <g class="chart-label">
+            <line x1="50" y1="150" x2="370" y2="150" class="chart-grid" />
+            <line x1="50" y1="110" x2="370" y2="110" class="chart-grid" />
+            <line x1="50" y1="70" x2="370" y2="70" class="chart-grid" />
+            <text x="20" y="194">60%</text>
+            <text x="20" y="154">70%</text>
+            <text x="20" y="114">80%</text>
+            <text x="20" y="74">90%</text>
+          </g>
+          <!-- Bars (satisfaction scores) -->
+          <g>
+            <!-- Boots &amp; Ground 94% -->
+            <rect x="80" y="50" width="40" height="140" class="chart-bar-primary" />
+            <!-- 65th Gala 88% -->
+            <rect x="180" y="70" width="40" height="120" class="chart-bar-secondary" />
+            <!-- Holiday Party 82% -->
+            <rect x="280" y="90" width="40" height="100" class="chart-bar-tertiary" />
+          </g>
+          <!-- Event labels -->
+          <g class="chart-label">
+            <text x="70" y="205">Boots</text>
+            <text x="65" y="218">Mixer</text>
+            <text x="170" y="205">65th</text>
+            <text x="162" y="218">Gala</text>
+            <text x="270" y="205">Holiday</text>
+            <text x="280" y="218">Party</text>
+          </g>
+          <text x="60" y="14" class="chart-title">Event Satisfaction (Mock Data)</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <br /><br />
+
+  <!-- Campaign Control Center -->
+  <section id="campaigns">
+    <h2>Event &amp; Campaign Control Center</h2>
+    <div class="two-col">
+      <!-- Left: Campaign list -->
+      <div class="card">
+        <div class="campaign-meta" style="margin-bottom: 16px;">
+          <span class="subtext">Configure how Blabbing supports each key event.</span>
+          <button class="btn btn-primary" id="btnNewCampaign">+ New Campaign</button>
+        </div>
+        <table class="table" id="campaignTable">
+          <thead>
+            <tr>
+              <th>Event</th>
+              <th>Channel</th>
+              <th>Status</th>
+              <th>Launch</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-campaign="boots">
+              <td>Boots &amp; Ground Mixer</td>
+              <td>Email + IG</td>
+              <td><span class="pill pill-sent">Live</span></td>
+              <td>Sep 15</td>
+            </tr>
+            <tr data-campaign="gala">
+              <td>65th Anniversary Gala</td>
+              <td>Email + FB</td>
+              <td><span class="pill pill-scheduled">Scheduled</span></td>
+              <td>Nov 22</td>
+            </tr>
+            <tr data-campaign="holiday">
+              <td>Holiday Alumni Party</td>
+              <td>IG + Survey</td>
+              <td><span class="pill pill-draft">Draft</span></td>
+              <td>Dec 12</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Right: Campaign builder/preview -->
+      <div class="card">
+        <div class="campaign-meta">
+          <div>
+            <div class="subtext">Editing campaign</div>
+            <strong id="campaignTitle">65th Anniversary Gala</strong>
+          </div>
+          <div>
+            <button class="btn btn-ghost" id="btnApprove">Mark as Approved</button>
+          </div>
+        </div>
+        <div style="margin-bottom: 12px; display:flex; gap:8px; align-items:center;">
+          <label for="campaignSelect" class="subtext">Switch event:</label>
+          <select id="campaignSelect" class="campaign-select">
+            <option value="boots">Boots &amp; Ground Mixer</option>
+            <option value="gala" selected>65th Anniversary Gala</option>
+            <option value="holiday">Holiday Alumni Party</option>
+          </select>
+        </div>
+        <div class="tabs">
+          <div class="tab active" data-tab="assets">Assets</div>
+          <div class="tab" data-tab="audience">Audience</div>
+          <div class="tab" data-tab="schedule">Schedule</div>
+        </div>
+        <div id="tab-assets" class="tab-panel">
+          <div class="asset-block">
+            <div class="asset-label">Email Invite</div>
+            <div class="asset-content" id="emailPreview">🎓 Join us for Savannah State's 65th Anniversary Gala in Atlanta! Tap to reserve your seat and support new scholarships.</div>
+          </div>
+          <div class="asset-block">
+            <div class="asset-label">Instagram Caption</div>
+            <div class="asset-content" id="socialPreview">Tigers, let's celebrate 65 years of impact. 🐅 Secure your gala ticket and help us hit $50k in scholarships this year.</div>
+          </div>
+          <div class="asset-block">
+            <div class="asset-label">Post-Event Pulse Question</div>
+            <div class="asset-content" id="pulsePreview">In one tap: How likely are you to attend another SSU Metro Atlanta event in the next 6 months?</div>
+          </div>
+        </div>
+        <div id="tab-audience" class="tab-panel" style="display:none;">
+          <div class="asset-block">
+            <div class="asset-label">Target Segments</div>
+            <div class="asset-content" id="audiencePreview">• Primary: Alumni 35–60, past donors, Metro Atlanta
+• Secondary: Recent grads (0–5 yrs out) interested in networking
+• Exclusions: Unsubscribed or bounced emails</div>
+          </div>
+          <div class="asset-block">
+            <div class="asset-label">Channels</div>
+            <div class="asset-content">Email, Facebook event, Instagram post, post-event Blabbing pulse via SMS/email.</div>
+          </div>
+        </div>
+        <div id="tab-schedule" class="tab-panel" style="display:none;">
+          <div class="asset-block">
+            <div class="asset-label">Automation Timeline</div>
+            <div class="asset-content" id="schedulePreview">• T-21 days: Save-the-date email
+• T-10 days: Ticket push + social countdown
+• T-1 day: Reminder + parking details
+• T+1 hour after event: Blabbing pulse survey
+• T+3 days: Thank-you + donation follow-up</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <br /><br />
+
+  <!-- Sentiment Section -->
+  <section id="sentiment">
+    <h2>Pulse Sentiment</h2>
+    <div class="card" style="display:flex; justify-content:center;">
+      <svg class="chart-svg" viewBox="0 0 400 220" style="width:33%; min-width:300px;" role="img" aria-labelledby="title-sentiment">
+        <title id="title-sentiment">Live Sentiment Pulse</title>
+        <line x1="50" y1="20" x2="50" y2="190" class="chart-axis" />
+        <line x1="50" y1="190" x2="370" y2="190" class="chart-axis" />
+        <g class="chart-label">
+          <line x1="50" y1="150" x2="370" y2="150" class="chart-grid" />
+          <line x1="50" y1="110" x2="370" y2="110" class="chart-grid" />
+          <line x1="50" y1="70" x2="370" y2="70" class="chart-grid" />
+          <text x="20" y="194">60%</text>
+          <text x="20" y="154">70%</text>
+          <text x="20" y="114">80%</text>
+          <text x="20" y="74">90%</text>
+        </g>
+        <polyline class="chart-line-accent" points="60,150 90,143 120,130 150,115 180,100 210,90 240,100 270,92 300,82 330,88" />
+        <g class="chart-label">
+          <text x="55" y="205">W1</text>
+          <text x="85" y="205">W2</text>
+          <text x="115" y="205">W3</text>
+          <text x="145" y="205">W4</text>
+          <text x="175" y="205">W5</text>
+          <text x="205" y="205">W6</text>
+          <text x="235" y="205">W7</text>
+          <text x="265" y="205">W8</text>
+          <text x="295" y="205">W9</text>
+          <text x="325" y="205">W10</text>
+        </g>
+        <text x="60" y="14" class="chart-title">Overall Sentiment (Mock Weekly)</text>
+      </svg>
+    </div>
+  </section>
+
+  <section id="opportunity" style="margin-top:40px;">
+    <h2>Opportunity Creation</h2>
+    <div class="card oppty-card">
+      <div class="oppty-header">
+        <div>
+          <h3 style="margin:0 0 4px;">AI Opportunity Engine</h3>
+          <div class="subtext">Pick a goal and Blabbing will show who to engage, what to ask, and the impact you can expect.</div>
+        </div>
+        <div class="goal-toggle">
+          <button class="goal-pill active" data-goal="donations">Grow Donations</button>
+          <button class="goal-pill" data-goal="membership">Grow Membership</button>
+          <button class="goal-pill" data-goal="events">Fill Events</button>
+          <button class="goal-pill" data-goal="reactivation">Reactivate Alumni</button>
+        </div>
+      </div>
+
+      <div class="oppty-layout">
+        <!-- Left: Segments -->
+        <div class="oppty-left">
+          <h4 style="margin:0 0 4px;">Top Segments to Activate</h4>
+          <div class="subtext">Segments are ranked for the selected goal.</div>
+          <ul id="segmentList" class="segment-list"></ul>
+        </div>
+
+        <!-- Right: Scores + Questions + People + Forecast -->
+        <div class="oppty-right">
+          <div class="oppty-scores">
+            <div class="oppty-score-pill">
+              <div class="subtext">Likelihood to Donate</div>
+              <div id="scoreDonate" class="oppty-score-value">–</div>
+            </div>
+            <div class="oppty-score-pill">
+              <div class="subtext">Likelihood to Join / Renew</div>
+              <div id="scoreJoin" class="oppty-score-value">–</div>
+            </div>
+            <div class="oppty-score-pill">
+              <div class="subtext">Likelihood to Attend Events</div>
+              <div id="scoreAttend" class="oppty-score-value">–</div>
+            </div>
+          </div>
+
+          <div class="oppty-questions">
+            <strong>Recommended Questions</strong>
+            <ul id="questionList" style="margin:8px 0 0 16px;"></ul>
+          </div>
+
+          <div class="oppty-people">
+            <strong>High-Opportunity Members</strong>
+            <ul id="peopleList" class="oppty-people-list"></ul>
+          </div>
+
+          <div class="oppty-forecast">
+            <strong>Projected Impact (Next 30 Days)</strong>
+            <div id="forecastText" style="margin-top:6px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+<script>
+  const campaigns = {
+    boots: {
+      title: "Boots & Ground Mixer",
+      email: "Step into an evening of line dancing, food, and Tigers. RSVP to support the Metro Atlanta scholarship fund.",
+      social: "Boots on, Tigers up. 🐅 Join our Boots & Ground Mixer and help us raise funds for new SSU students.",
+      pulse: "How likely are you to recommend this mixer to another alum?",
+      audience: "• Primary: Alumni 30–55 in Metro Atlanta\n• Focus: High-engagement event attendees from last 12 months",
+      schedule: "• T-14 days: Mixer announcement\n• T-7 days: RSVP reminder\n• T+2 hours: Blabbing pulse about venue, DJ, networking\n• T+3 days: Photo recap + membership ask"
+    },
+    gala: {
+      title: "65th Anniversary Gala",
+      email: "🎓 Join us for Savannah State's 65th Anniversary Gala in Atlanta! Tap to reserve your seat and support new scholarships.",
+      social: "Tigers, let's celebrate 65 years of impact. 🐅 Secure your gala ticket and help us hit $50k in scholarships this year.",
+      pulse: "Did this gala make you feel more connected to Savannah State?",
+      audience: "• Primary: Alumni 35–60, past donors, Metro Atlanta\n• Secondary: Alumni within driving distance of Atlanta",
+      schedule: "• T-21 days: Save-the-date email\n• T-10 days: Ticket push + social countdown\n• T-1 day: Reminder + parking details\n• T+1 hour after event: Blabbing pulse survey\n• T+3 days: Thank-you + donation follow-up"
+    },
+    holiday: {
+      title: "Holiday Alumni Party",
+      email: "Wrap up the year with your SSU family. Enjoy music, games, and a warm Tiger welcome.",
+      social: "Holiday vibes, Tiger pride. 🎄🐅 RSVP for our alumni holiday party and bring a fellow Tiger.",
+      pulse: "How likely are you to attend another SSU holiday event?",
+      audience: "• Primary: Alumni of all ages in Metro Atlanta\n• Extra push: Recent grads (0–10 yrs)",
+      schedule: "• T-10 days: Invite with RSVP link\n• T-3 days: Reminder + toy/scholarship drive mention\n• T+1 hour: Blabbing pulse on venue, music, games"
+    }
+  };
+
+  const selectEl = document.getElementById('campaignSelect');
+  const titleEl = document.getElementById('campaignTitle');
+  const emailEl = document.getElementById('emailPreview');
+  const socialEl = document.getElementById('socialPreview');
+  const pulseEl = document.getElementById('pulsePreview');
+  const audienceEl = document.getElementById('audiencePreview');
+  const scheduleEl = document.getElementById('schedulePreview');
+  const table = document.getElementById('campaignTable');
+  const approveBtn = document.getElementById('btnApprove');
+  const newBtn = document.getElementById('btnNewCampaign');
+
+  // Opportunity Creation elements
+  const goalPills = document.querySelectorAll('.goal-pill');
+  const segmentList = document.getElementById('segmentList');
+  const scoreDonateEl = document.getElementById('scoreDonate');
+  const scoreJoinEl = document.getElementById('scoreJoin');
+  const scoreAttendEl = document.getElementById('scoreAttend');
+  const questionList = document.getElementById('questionList');
+  const peopleList = document.getElementById('peopleList');
+  const forecastText = document.getElementById('forecastText');
+
+  function loadCampaign(key) {
+    const c = campaigns[key];
+    if (!c) return;
+    titleEl.textContent = c.title;
+    emailEl.textContent = c.email;
+    socialEl.textContent = c.social;
+    pulseEl.textContent = c.pulse;
+    audienceEl.textContent = c.audience;
+    scheduleEl.textContent = c.schedule;
+  }
+
+  if (selectEl && table) {
+    selectEl.addEventListener('change', (e) => {
+      loadCampaign(e.target.value);
+      [...table.querySelectorAll('tbody tr')].forEach(row => {
+        row.classList.toggle('active-row', row.dataset.campaign === e.target.value);
+      });
+    });
+  }
+
+  if (table && selectEl) {
+    table.addEventListener('click', (e) => {
+      const row = e.target.closest('tr[data-campaign]');
+      if (!row) return;
+      const key = row.dataset.campaign;
+      selectEl.value = key;
+      loadCampaign(key);
+      [...table.querySelectorAll('tbody tr')].forEach(r => r.classList.remove('active-row'));
+      row.classList.add('active-row');
+    });
+  }
+
+  const tabs = document.querySelectorAll('.tab');
+  const panels = {
+    assets: document.getElementById('tab-assets'),
+    audience: document.getElementById('tab-audience'),
+    schedule: document.getElementById('tab-schedule')
+  };
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const key = tab.dataset.tab;
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      Object.keys(panels).forEach(k => {
+        panels[k].style.display = (k === key) ? 'block' : 'none';
+      });
+    });
+  });
+
+  if (approveBtn) {
+    approveBtn.addEventListener('click', () => {
+      approveBtn.textContent = 'Approved';
+      approveBtn.classList.remove('btn-ghost');
+      approveBtn.classList.add('btn-primary');
+    });
+  }
+
+  if (newBtn) {
+    newBtn.addEventListener('click', () => {
+      alert('In a full build, this would open a step-by-step campaign creator for John. For this demo, use the table to explore existing campaigns.');
+    });
+  }
+
+  // initialize default campaign
+  loadCampaign('gala');
+
+  // ------------------------------
+  // Opportunity Creation data
+  // ------------------------------
+  const opportunityData = {
+    donations: {
+      segments: [
+        {
+          key: 'men_25_35',
+          name: 'Men 25–35',
+          tag: 'High 🔥',
+          tagColor: '#5e17eb',
+          scores: { donate: 82, join: 64, attend: 76 },
+          questions: [
+            'How likely are you to support the scholarship fund this year?',
+            'Would you attend a scholarship-focused networking event?',
+            'Would you consider joining a monthly giving circle?'
+          ],
+          people: [
+            { name: 'J. Williams', note: 'Boots & Ground attendee, very positive sentiment', score: 88 },
+            { name: 'C. Taylor', note: 'Opened last 3 fundraising emails', score: 84 }
+          ],
+          forecast: { donors: 8, amount: '$4,200', members: 3, attendees: 10 }
+        },
+        {
+          key: 'women_36_50',
+          name: 'Women 36–50',
+          tag: 'Medium',
+          tagColor: '#ffbd59',
+          scores: { donate: 79, join: 72, attend: 68 },
+          questions: [
+            'How likely are you to renew your support for scholarships?',
+            'Which student success area would you be most excited to fund?',
+            'Would you like to receive an impact update twice a year?'
+          ],
+          people: [
+            { name: 'L. Carter', note: 'Past donor, high sentiment on recent events', score: 86 },
+            { name: 'S. Green', note: 'Clicked giving links but has not donated yet', score: 80 }
+          ],
+          forecast: { donors: 6, amount: '$3,100', members: 2, attendees: 7 }
+        },
+        {
+          key: 'recent_grads',
+          name: 'Recent grads (0–5 yrs)',
+          tag: 'Rising',
+          tagColor: '#c2b2e0',
+          scores: { donate: 60, join: 85, attend: 82 },
+          questions: [
+            'What would make supporting the scholarship fund feel doable this year?',
+            'Would you join a $10/month young alumni giving circle?',
+            'How interested are you in employer matching gifts?'
+          ],
+          people: [
+            { name: 'T. Brown', note: 'Recent grad, attended last 2 events', score: 78 },
+            { name: 'D. Lee', note: 'Positive pulse responses, no giving history yet', score: 75 }
+          ],
+          forecast: { donors: 4, amount: '$1,200', members: 6, attendees: 9 }
+        }
+      ]
+    },
+    membership: {
+      segments: [
+        {
+          key: 'recent_grads_mem',
+          name: 'Recent grads (0–5 yrs)',
+          tag: 'High',
+          tagColor: '#5e17eb',
+          scores: { donate: 55, join: 88, attend: 80 },
+          questions: [
+            'What would make joining the alumni chapter worth it for you?',
+            'How often would you like in-person vs virtual events?',
+            'Would you be interested in a young professionals sub-group?'
+          ],
+          people: [
+            { name: 'A. Johnson', note: 'Filled “very likely to join” on last pulse', score: 92 },
+            { name: 'M. Rivera', note: 'Attended welcome mixer, not yet a member', score: 87 }
+          ],
+          forecast: { donors: 2, amount: '$600', members: 18, attendees: 14 }
+        },
+        {
+          key: 'mid_career',
+          name: 'Alumni 36–50',
+          tag: 'Medium',
+          tagColor: '#ffbd59',
+          scores: { donate: 76, join: 72, attend: 70 },
+          questions: [
+            'Would a “giving + membership” bundle be appealing to you?',
+            'How likely are you to renew your membership next year?',
+            'Would you mentor a recent graduate?'
+          ],
+          people: [
+            { name: 'K. Daniels', note: 'Member lapsed once, strong event engagement', score: 81 },
+            { name: 'R. Harris', note: 'Consistent attendee, not yet a formal member', score: 79 }
+          ],
+          forecast: { donors: 3, amount: '$1,500', members: 10, attendees: 11 }
+        }
+      ]
+    },
+    events: {
+      segments: [
+        {
+          key: 'career_interest',
+          name: 'Men 25–35 (career-focused)',
+          tag: 'High 🔥',
+          tagColor: '#5e17eb',
+          scores: { donate: 70, join: 74, attend: 90 },
+          questions: [
+            'Would you attend a career networking night in the next 60 days?',
+            'What format do you prefer: panel, mixer, or mentorship circles?',
+            'Which city is most convenient for you?'
+          ],
+          people: [
+            { name: 'P. Morgan', note: 'Clicked “career” content in last 3 emails', score: 93 },
+            { name: 'C. Scott', note: 'Responded “very interested” in networking events', score: 90 }
+          ],
+          forecast: { donors: 4, amount: '$1,800', members: 5, attendees: 22 }
+        },
+        {
+          key: 'family_events',
+          name: 'Alumni with families',
+          tag: 'Medium',
+          tagColor: '#ffbd59',
+          scores: { donate: 68, join: 70, attend: 78 },
+          questions: [
+            'Would you attend a family-friendly SSU day in the city?',
+            'What time of day works best for events with kids?',
+            'How often would you attend family-oriented events each year?'
+          ],
+          people: [
+            { name: 'L. Parker', note: 'Mentioned kids in last event survey', score: 82 },
+            { name: 'B. James', note: 'Attended daytime events, skipped evening ones', score: 79 }
+          ],
+          forecast: { donors: 3, amount: '$1,200', members: 4, attendees: 18 }
+        }
+      ]
+    },
+    reactivation: {
+      segments: [
+        {
+          key: 'dormant_positive',
+          name: 'Dormant but positive sentiment',
+          tag: 'High',
+          tagColor: '#5e17eb',
+          scores: { donate: 65, join: 72, attend: 60 },
+          questions: [
+            'What would make you feel more connected to Savannah State again?',
+            'Would you attend one “welcome back” event this year?',
+            'Which types of updates would you like to receive?'
+          ],
+          people: [
+            { name: 'E. Wright', note: 'Positive pulse, no engagement in 18 months', score: 80 },
+            { name: 'G. Hall', note: 'Opened last newsletter after long silence', score: 77 }
+          ],
+          forecast: { donors: 3, amount: '$900', members: 6, attendees: 8 }
+        },
+        {
+          key: 'lapsed_members',
+          name: 'Lapsed members',
+          tag: 'Medium',
+          tagColor: '#ffbd59',
+          scores: { donate: 58, join: 70, attend: 55 },
+          questions: [
+            'What caused you to pause your membership?',
+            'Would a discounted “returning member” rate interest you?',
+            'How likely are you to rejoin in the next 12 months?'
+          ],
+          people: [
+            { name: 'N. Brooks', note: 'Member until 2023, high event history', score: 74 },
+            { name: 'H. King', note: 'Stopped giving but still opens emails', score: 71 }
+          ],
+          forecast: { donors: 2, amount: '$700', members: 8, attendees: 5 }
+        }
+      ]
+    }
+  };
+
+  let currentGoal = 'donations';
+  let currentSegmentKey = null;
+
+  function updateOpportunityPanel(goalKey, segmentKey) {
+    const goal = opportunityData[goalKey];
+    if (!goal) return;
+    const seg = goal.segments.find(s => s.key === segmentKey) || goal.segments[0];
+    if (!seg) return;
+
+    if (scoreDonateEl) scoreDonateEl.textContent = seg.scores.donate + '/100';
+    if (scoreJoinEl) scoreJoinEl.textContent = seg.scores.join + '/100';
+    if (scoreAttendEl) scoreAttendEl.textContent = seg.scores.attend + '/100';
+
+    if (questionList) {
+      questionList.innerHTML = '';
+      seg.questions.forEach(function (q) {
+        const li = document.createElement('li');
+        li.textContent = q;
+        questionList.appendChild(li);
+      });
+    }
+
+    if (peopleList) {
+      peopleList.innerHTML = '';
+      seg.people.forEach(function (p) {
+        const li = document.createElement('li');
+        li.textContent = p.name + ' — ' + p.note + ' (Score: ' + p.score + '/100)';
+        peopleList.appendChild(li);
+      });
+    }
+
+    if (forecastText && seg.forecast) {
+      const f = seg.forecast;
+      forecastText.textContent = 'Blabbing estimates ' + f.donors + ' new donors, ' + f.members + ' new/renewed members, and about ' + f.attendees + ' event attendees, totaling around ' + f.amount + '.';
+    }
+  }
+
+  function renderSegments(goalKey) {
+    const goal = opportunityData[goalKey];
+    if (!goal || !segmentList) return;
+
+    segmentList.innerHTML = '';
+    goal.segments.forEach(function (seg, index) {
+      const li = document.createElement('li');
+      li.className = 'segment-item' + (index === 0 ? ' active' : '');
+      li.setAttribute('data-segment-key', seg.key);
+      li.innerHTML = '<span>' + seg.name + '</span>' +
+        '<span class="segment-tag" style="color:' + seg.tagColor + ';">' + seg.tag + '</span>';
+      li.addEventListener('click', function () {
+        currentSegmentKey = seg.key;
+        const items = segmentList.querySelectorAll('.segment-item');
+        items.forEach(function (el) { el.classList.remove('active'); });
+        li.classList.add('active');
+        updateOpportunityPanel(goalKey, seg.key);
+      });
+      segmentList.appendChild(li);
+      if (index === 0) {
+        currentSegmentKey = seg.key;
+      }
+    });
+  }
+
+  function setGoal(goalKey) {
+    currentGoal = goalKey;
+    if (goalPills && goalPills.length) {
+      goalPills.forEach(function (pill) {
+        pill.classList.toggle('active', pill.getAttribute('data-goal') === goalKey);
+      });
+    }
+    renderSegments(goalKey);
+    updateOpportunityPanel(goalKey, currentSegmentKey);
+  }
+
+  if (goalPills && goalPills.length && segmentList) {
+    goalPills.forEach(function (pill) {
+      pill.addEventListener('click', function () {
+        const goalKey = pill.getAttribute('data-goal');
+        setGoal(goalKey);
+      });
+    });
+
+    // initialize default goal view
+    setGoal('donations');
+  }
+</script>
+</body>
+</html>
